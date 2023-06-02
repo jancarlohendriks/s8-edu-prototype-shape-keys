@@ -2,15 +2,15 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as dat from "dat.gui";
-import model from "@/assets/models/3.gltf?url";
+import model from "@/assets/models/Humans-2.gltf?url";
 
 let camera = new THREE.PerspectiveCamera(
   50,
   window.innerWidth / window.innerHeight,
-  1,
-  5000
+  0.1,
+  1000
 );
-camera.position.set(900, 1200, 800);
+camera.position.set(1.5, 3, 1.5);
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 let scene = new THREE.Scene();
@@ -44,28 +44,27 @@ let animate = () => {
 };
 
 let loader = new GLTFLoader();
-let object;
+let human_regular;
 let gui = new dat.GUI();
 let options = {
-  Lenght: 0,
-  Height: 0,
-  Width: 0,
+  "human_short_small-base": 0,
+  "human_short_large-base": 0,
 };
 
 loader.load(model, (gltf) => {
-  object = gltf.scenes[0].children[0];
-  scene.add(object);
-  console.log(object);
+  human_regular = gltf.scenes[0].children.find(
+    (obj) => obj.name == "human_short_regular-base"
+  );
+  scene.add(human_regular);
+  console.log(human_regular.morphTargetInfluences);
 
   let morphChange = () => {
-    object.morphTargetInfluences[0] = options.Lenght;
-    object.morphTargetInfluences[1] = options.Height;
-    object.morphTargetInfluences[2] = options.Width;
+    human_regular.morphTargetInfluences[0] = options["human_short_small-base"];
+    human_regular.morphTargetInfluences[1] = options["human_short_large-base"];
   };
 
-  gui.add(options, "Height", 0, 1).onChange(morphChange);
-  gui.add(options, "Lenght", 0, 1).onChange(morphChange);
-  gui.add(options, "Width", 0, 1).onChange(morphChange);
+  gui.add(options, "human_short_small-base", 0, 1).onChange(morphChange);
+  gui.add(options, "human_short_large-base", 0, 1).onChange(morphChange);
 });
 
 animate();
