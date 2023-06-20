@@ -4,8 +4,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as dat from "dat.gui";
 
 import model from "@/assets/models/Humans-3.gltf?url";
-import lights from "./lib/lights";
-import createCamera from "./lib/createCamera";
+import { ambientLight, spotLight } from "./lib/lights.js";
+import createCamera from "./lib/camera.js";
 import { createRenderer } from "./lib/renderer";
 
 // Initialize variables
@@ -27,7 +27,7 @@ document.body.appendChild(renderer.domElement);
 // Create the scene
 scene = new THREE.Scene();
 scene.background = new THREE.Color("#000000");
-scene.add(lights.ambientLight, lights.spotLight);
+scene.add(ambientLight, spotLight);
 
 // Create the controls
 controls = new OrbitControls(camera, renderer.domElement);
